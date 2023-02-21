@@ -1,0 +1,147 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+    min-width: 1000px;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-box {
+    width: 280px;
+    height: 100%;
+    background-color: burlywood;
+    box-sizing: border-box;
+}
+
+.title-top {
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    color: #000;
+    background-color: cadetblue;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.col {
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+.col .title {
+    color: #000;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.col .text-p {
+    width: 100%;
+    height: 40px;
+    background-color: #fff;
+    padding: 4px 2px;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.col input {
+    display: block;
+    width: 100%;
+    height: 100%;
+    line-height: 40px;
+    outline: none;
+    border: none;
+    font-size: 16px;
+    padding: 0 4px;
+    box-sizing: border-box;
+}
+
+.container .btn-box {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.container .btn-box .btn,
+.restart-btn {
+    width: 76px;
+    height: 36px;
+    text-align: center;
+    line-height: 36px;
+    color: #fff;
+    border-radius: 4px;
+    background-color: cornflowerblue;
+    position: relative;
+    right: 0;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.right-box {
+    flex: 1;
+    height: 100%;
+    overflow-y: scroll;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #31312b;
+    color: #d0d4d3;
+    font-size: 16px;
+}
+
+.right-box div {
+    margin-bottom: 6px;
+}
+
+.method.get {
+    background: cornflowerblue;
+    padding: 2px 4px;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.method.post {
+    background: darkorchid;
+    padding: 2px 4px;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.method.started {
+    background: rgb(19, 59, 235);
+    padding: 2px 4px;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.method.stopped {
+    background: rgb(221, 14, 62);
+    padding: 2px 4px;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.method.started+.path {
+    color: rgb(86, 230, 230);
+}
+
+.method.stopped+.msg {
+    color: rgb(234, 55, 136);
+}
+
+
+.path {
+    margin-left: 6px;
+}

@@ -1,0 +1,40 @@
+{
+  "name": "node-server-proxy",
+  "version": "1.1.2",
+  "description": "基于node.js的服务器代理 ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "nsp": "./bin/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kbfz/node-server-proxy.git"
+  },
+  "keywords": [
+    "node.js",
+    "proxy"
+  ],
+  "author": "liujia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kbfz/node-server-proxy/issues"
+  },
+  "homepage": "https://github.com/kbfz/node-server-proxy#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "chalk": "^4.1.0",
+    "commander": "^7.0.0",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "http-proxy": "^1.18.1",
+    "http-proxy-middleware": "^2.0.1",
+    "inquirer": "^7.3.3",
+    "open": "^8.4.0",
+    "shelljs": "^0.8.4",
+    "socket.io": "^4.4.0"
+  }
+}

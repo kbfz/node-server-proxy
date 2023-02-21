@@ -1,0 +1,170 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Liu
+ * @Date: 2021-12-03 18:54:43
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-12-13 18:04:38
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./public/css/reset.css">
+    <link rel="stylesheet" href="./public/css/index.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <title>
+        <%= title %>
+    </title>
+</head>
+
+<body>
+    <container class="container">
+        <div class="left-box">
+            <div class="title-top">
+                <%= title %>
+            </div>
+            <div class="col">
+                <div class="title">代理目标地址：</div>
+                <div class="text-p">
+                    <input type="text" id="host" name='host'>
+                </div>
+            </div>
+            <div class="col">
+                <div class="title">代理的端口号：</div>
+                <div class="text-p">
+                    <input type="text" id="port" name='port'>
+                </div>
+            </div>
+            <div class="col">
+                <div class="title">代理接口前缀：</div>
+                <div class="text-p">
+                    <input type="text" id="path" name='path' placeholder="默认前缀为api">
+                </div>
+            </div>
+            <div class="btn-box">
+                <div class="btn" data-text='start'>启 动</div>
+            </div>
+        </div>
+        <div class="right-box">
+            <div class="logs"></div>
+        </div>
+    </container>
+</body>
+<script>
+    $(function () {
+        let host = sessionStorage.getItem('host')
+        let port = sessionStorage.getItem('port')
+        let path = sessionStorage.getItem('path') || '/api'
+        let status = sessionStorage.getItem('status') || 'start'
+        $('#host').val(host)
+        $('#path').val(path)
+        $('#port').val(port)
+        $('.btn').data('text', status)
+        // 判断初始化时 btn的状态
+        if (status === 'start') {
+            $('.btn').text('启 动')
+        } else {
+            $('.btn').text('停 止')
+            ajaxRequest() // 启动
+        }
+
+        $('.btn').click(function () {
+            if (!$('#host').val() || !$('#path').val()) return false;
+            let data = $('.btn').data('text');
+
+            if (data != 'start') {
+                stopHandle()
+                $('.btn').data('text', 'start')
+                return false
+            } else {
+                ajaxRequest() // 启动
+            }
+
+        });
+        // 停止
+        function stopHandle() {
+            let msg = '确定要停止服务吗？'
+            let result = confirm(msg)
+            if (result) {
+                console.log('停止服务')
+                $('.btn').text('启 动')
+                $('.btn').data('text', 'start')
+                sessionStorage.setItem('status', 'start')
+                sotpServer()
+            }
+        }
+        // 启 动
+        function ajaxRequest() {
+            $.ajax({
+                url: '/proxy',
+                data: {
+                    host: $('#host').val(),
+                    port: $('#port').val(),
+                    path: $('#path').val()
+                },
+                type: 'POST',
+                dataType: 'json',
+                success: function (res) {
+                    // $('.right-box').html('')
+                    $('.btn').text('停 止')
+                    $('.btn').data('text', 'stop')
+                    let html = `<div class="logs">
+                                <span class="method ${res.method.toLowerCase()}">${res.method}</span>
+                                <span class="path">${res.path}</span>
+                            </div>`
+                    $('.right-box').append(html)
+                    $('.logs:last')[0].scrollIntoView()
+                    wsRequest(res.wsUrl)
+                    sessionStorage.setItem('host', $('#host').val())
+                    sessionStorage.setItem('port', $('#port').val())
+                    sessionStorage.setItem('path', $('#path').val())
+                    sessionStorage.setItem('status', 'stop')
+                }
+            })
+        };
+
+        // ws 请求
+        function wsRequest(wsUrl) {
+            const socket = io.connect(wsUrl); //通过ip和端口建立一个socket client
+            socket.on('log', function (res) {
+                let html = `<div class="logs">
+                                <span class="method ${res.method.toLowerCase()}">${res.method}</span>
+                                <span class="path"> ${res.path}</span>
+                            </div>`
+                $('.right-box').append(html)
+                $('.logs:last')[0].scrollIntoView()
+            });
+            socket.on('connect_error', function (err) {
+                console.log("%c%s", "color: #fff; background: #ff899a; font-size: 14px;", " socket 链接失败 ");
+                if (err) {
+                    socket.close()
+                }
+            });
+        }
+
+        // 停止服务
+        function sotpServer() {
+            $.ajax({
+                url: '/stop',
+                data: {},
+                type: 'POST',
+                dataType: 'json',
+                success: function (res) {
+                    let html = `<div class="logs">
+                                <span class="method ${res.method.toLowerCase()}">${res.method}</span>
+                                <span class="path msg">${res.msg}</span>
+                            </div>`
+                    $('.right-box').append(html)
+                    $('.logs:last')[0].scrollIntoView()
+                }
+            })
+        }
+    })
+</script>
+
+</html>
